@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentimentAI — Instant Text Analysis</title>
+  <meta name="description" content="A cloud-native sentiment analysis tool powered by DistilBERT. Type any text to instantly discover its emotional tone." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated background orbs -->
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+  <div class="bg-orb orb-3" aria-hidden="true"></div>
+
+  <main class="container">
+    <!-- Header -->
+    <header class="hero">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Powered by DistilBERT
+      </div>
+      <h1>Sentiment<span class="accent">AI</span></h1>
+      <p class="subtitle">
+        Drop any sentence and uncover its emotional polarity in milliseconds,
+        powered by a live AI model running in the cloud.
+      </p>
+    </header>
+
+    <!-- Input card -->
+    <section class="card input-card" aria-label="Text input section">
+      <label for="text-input" class="input-label">Your Text</label>
+      <textarea
+        id="text-input"
+        class="text-area"
+        rows="5"
+        placeholder="e.g. "I absolutely love how this architecture scales effortlessly!""
+        aria-label="Enter text for sentiment analysis"
+        maxlength="2000"
+      ></textarea>
+      <div class="input-footer">
+        <span id="char-count" class="char-count">0 / 2000</span>
+        <button id="analyze-btn" class="btn-primary" aria-label="Analyze text sentiment">
+          <span class="btn-text">Analyze Sentiment</span>
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Loading indicator -->
+    <div id="loading" class="loading" role="status" aria-live="polite" hidden>
+      <div class="spinner"></div>
+      <span>Analyzing with AI…</span>
+    </div>
+
+    <!-- Error message -->
+    <div id="error-box" class="error-box" role="alert" aria-live="assertive" hidden></div>
+
+    <!-- Results card -->
+    <section id="result-card" class="card result-card" hidden aria-label="Analysis results">
+      <div class="result-header">
+        <div id="sentiment-badge" class="sentiment-badge"></div>
+        <div class="result-meta">
+          <span class="result-meta-label">Confidence</span>
+          <span id="confidence-value" class="result-meta-value"></span>
+        </div>
+      </div>
+
+      <!-- Confidence bar -->
+      <div class="confidence-track" role="progressbar" aria-label="Confidence level" aria-valuemin="0" aria-valuemax="100">
+        <div id="confidence-bar" class="confidence-bar"></div>
+      </div>
+
+      <!-- Echoed text -->
+      <div class="analyzed-text-section">
+        <p class="analyzed-text-label">Analyzed text</p>
+        <blockquote id="analyzed-text" class="analyzed-text"></blockquote>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        Microservice architecture · FastAPI + DistilBERT backend · Nginx frontend
+      </p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# -----------------------------------------------------------
+# Microservice A — AI Backend dependencies
+# CPU-only PyTorch is installed separately in the Dockerfile
+# via the official PyTorch index to keep the image lean.
+# -----------------------------------------------------------
+
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+pydantic==2.7.1
+transformers==4.40.2
+# 'accelerate' is optional but silences a HuggingFace warning
+accelerate==0.30.0

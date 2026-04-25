@@ -1,0 +1,68 @@
+# =============================================================================
+# docker-compose.yml — Local Integration Testing
+# =============================================================================
+#
+# Purpose:  Run BOTH microservices locally to verify end-to-end communication
+#           BEFORE writing Kubernetes manifests.
+#
+# Usage:
+#   docker-compose up --build           # build & start
+#   docker-compose up --build -d        # detached mode
+#   docker-compose logs -f backend      # stream backend logs
+#   docker-compose down                 # stop & remove containers
+#
+# Access:
+#   Frontend:  http://localhost
+#   Backend:   http://localhost:8000/docs  (FastAPI Swagger UI)
+#   Health:    http://localhost:8000/health
+#
+# NOTE: This file is FOR LOCAL TESTING ONLY.
+#       In Kubernetes you will write separate Deployment + Service manifests
+#       for each microservice and replace the Nginx upstream in nginx.conf
+#       with the K8s Service DNS name.
+# =============================================================================
+
+version: "3.9"
+
+services:
+  # ── Microservice A: AI Backend ────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sentiment-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"           # Expose for direct API testing / Swagger UI
+    networks:
+      - app-network
+    environment:
+      - TRANSFORMERS_OFFLINE=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+
+  # ── Microservice B: Frontend UI ───────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sentiment-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"               # Access the app at http://localhost
+    networks:
+      - app-network
+    depends_on:
+      backend:
+        condition: service_healthy   # Wait until backend passes health check
+
+# ── Shared Network ────────────────────────────────────────────────────────────
+# Both services are on the same bridge network so Nginx can resolve
+# "backend" as the backend container's hostname.
+networks:
+  app-network:
+    driver: bridge
