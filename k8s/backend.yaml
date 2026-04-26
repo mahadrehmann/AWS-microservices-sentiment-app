@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: YOUR_DOCKER_USERNAME/cloud-project-backend:latest
+        image: docker.io/mahad4/cloud-project-backend:3f94e7b8f2fee5b33a717ad0266d1d757c3a6472
         ports:
         - containerPort: 8000
         resources:
