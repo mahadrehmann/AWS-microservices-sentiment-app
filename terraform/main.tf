@@ -73,6 +73,14 @@ resource "aws_security_group" "k8s_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Kubernetes API"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # All outbound traffic allowed (package installs, image pulls, etc.)
   egress {
     from_port   = 0
