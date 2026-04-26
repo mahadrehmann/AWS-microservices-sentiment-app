@@ -22,8 +22,6 @@
 #       with the K8s Service DNS name.
 # =============================================================================
 
-version: "3.9"
-
 services:
   # ── Microservice A: AI Backend ────────────────────────────────────────────
   backend:

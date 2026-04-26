@@ -1,0 +1,37 @@
+---
+- name: Configure Kubernetes Node (k3s)
+  hosts: k8s_node
+  become: yes # This runs commands as 'sudo'
+  tasks:
+    - name: Wait for server to finish booting
+      wait_for_connection:
+        timeout: 60
+
+    - name: Create 2GB swap file (Fake RAM for our ML model)
+      command: fallocate -l 2G /swapfile
+      args:
+        creates: /swapfile
+
+    - name: Set swap file permissions
+      file:
+        path: /swapfile
+        mode: '0600'
+
+    - name: Format swap file
+      command: mkswap /swapfile
+      when: ansible_swaptotal_mb == 0
+
+    - name: Enable swap
+      command: swapon /swapfile
+      when: ansible_swaptotal_mb == 0
+
+    - name: Install k3s (Lightweight Kubernetes)
+      shell: curl -sfL https://get.k3s.io | sh -
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: Fetch kubeconfig to local machine
+      fetch:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: ../kubeconfig.yaml
+        flat: yes

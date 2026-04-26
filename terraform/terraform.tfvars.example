@@ -1,0 +1,10 @@
+# =============================================================================
+# terraform.tfvars.example — Safe template (commit this, not terraform.tfvars)
+# =============================================================================
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored and should never be committed.
+# =============================================================================
+
+key_pair_name = "YOUR_AWS_KEY_PAIR_NAME"
+# aws_region    = "us-east-1"
+# instance_type = "t3.medium"
