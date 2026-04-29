@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker.io/mahad4/cloud-project-backend:latest
+          image: docker.io/mahad4/cloud-project-backend:cfdfe6c
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
