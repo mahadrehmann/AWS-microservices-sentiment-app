@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker.io/mahad4/cloud-project-frontend:cfdfe6c
+        image: docker.io/mahad4/cloud-project-frontend:1de135751f5a6ee2eddf1c2b80025ac24f1cd948
         imagePullPolicy: Always
         ports:
         - containerPort: 80
