@@ -38,7 +38,7 @@ variable "key_pair_name" {
 variable "instance_type" {
   description = "EC2 instance type (t3.medium recommended for microk8s + HuggingFace)"
   type        = string
-  default     = "t3.micro"
+  default     = "t3.small"
 }
 
 # ── Security Group ────────────────────────────────────────────────────────────

@@ -15,19 +15,36 @@ spec:
         app: backend
     spec:
       containers:
-      - name: backend
-        image: docker.io/mahad4/cloud-project-backend:3f94e7b8f2fee5b33a717ad0266d1d757c3a6472
-        ports:
-        - containerPort: 8000
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "250m"
+        - name: backend
+          image: docker.io/mahad4/cloud-project-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
 spec:
   selector:
     app: backend
