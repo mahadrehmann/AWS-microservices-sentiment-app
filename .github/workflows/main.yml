@@ -50,20 +50,24 @@ jobs:
 
       - name: Update Kubernetes image tags
         run: |
-          set -e
           sed -i -E "s|docker.io/${DOCKERHUB_USER}/cloud-project-backend:[A-Za-z0-9._-]+|docker.io/${DOCKERHUB_USER}/cloud-project-backend:${IMAGE_TAG}|g" k8s/backend.yaml
           sed -i -E "s|docker.io/${DOCKERHUB_USER}/cloud-project-frontend:[A-Za-z0-9._-]+|docker.io/${DOCKERHUB_USER}/cloud-project-frontend:${IMAGE_TAG}|g" k8s/frontend.yaml
+          echo "Updated manifest files:"
+          grep "image:" k8s/backend.yaml k8s/frontend.yaml
 
-      - name: Commit manifest updates
+      - name: Commit and push manifest updates
         run: |
-          set -e
-          if git diff --quiet -- k8s/backend.yaml k8s/frontend.yaml; then
-            echo "No manifest changes to commit."
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          CHANGES=$(git status -s -- k8s/backend.yaml k8s/frontend.yaml)
+          if [[ -z "$CHANGES" ]]; then
+            echo "No manifest changes detected. Skipping commit."
             exit 0
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "Changes detected:"
+          echo "$CHANGES"
           git add k8s/backend.yaml k8s/frontend.yaml
           git commit -m "Update image tags to ${IMAGE_TAG} [skip ci]"
           git push
